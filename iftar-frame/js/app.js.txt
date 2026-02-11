@@ -1,0 +1,40 @@
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const frame = new Image();
+frame.src = "assets/frames/iftar-frame.png";
+
+let userImage = null;
+
+document.getElementById("upload").addEventListener("change", function (e) {
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    userImage = new Image();
+    userImage.onload = function () {
+      drawCanvas();
+    };
+    userImage.src = event.target.result;
+  };
+  reader.readAsDataURL(e.target.files[0]);
+});
+
+function drawCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (userImage) {
+    ctx.drawImage(userImage, 0, 0, canvas.width, canvas.height);
+  }
+
+  ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
+}
+
+frame.onload = function () {
+  drawCanvas();
+};
+
+function downloadImage() {
+  const link = document.createElement("a");
+  link.download = "iftar-mahfil-frame.png";
+  link.href = canvas.toDataURL();
+  link.click();
+}
